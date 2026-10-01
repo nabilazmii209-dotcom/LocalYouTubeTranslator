@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Whisper على الموبايل • بلا API • بلا حدود"
+            android:text="ترجمة مباشرة محلياً • Whisper • بلا API • بلا حدود"
             android:textColor="#9BA4B3"
             android:textSize="12sp"
             android:gravity="center"
@@ -70,18 +70,18 @@
             android:paddingTop="5dp">
 
             <RadioButton
-                android:id="@+id/modelBase"
+                android:id="@+id/modelTiny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="سريع (Base ~142MB)"
+                android:text="مباشر Tiny ~75MB"
                 android:textColor="#D7DBE5"
                 android:checked="true"/>
 
             <RadioButton
-                android:id="@+id/modelSmall"
+                android:id="@+id/modelBase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="أقوى (Small ~466MB)"
+                android:text="أدق Base ~142MB"
                 android:textColor="#D7DBE5"/>
         </RadioGroup>
 
