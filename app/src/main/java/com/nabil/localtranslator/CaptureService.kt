@@ -32,7 +32,7 @@ class CaptureService : Service() {
         const val EXTRA_RESULT_CODE = "resultCode"
         const val EXTRA_DATA = "resultData"
         const val SAMPLE_RATE = 48000
-        const val CHUNK_SECONDS = 10
+        const val CHUNK_MILLIS = 2500
     }
 
     private val running = AtomicBoolean(false)
@@ -97,7 +97,7 @@ class CaptureService : Service() {
             r.startRecording()
             val buf = ByteArray(8192)
             var chunk = ByteArrayOutputStream()
-            val targetBytes = SAMPLE_RATE * 2 * CHUNK_SECONDS
+            val targetBytes = (SAMPLE_RATE * 2L * CHUNK_MILLIS / 1000L).toInt()
 
             while (running.get()) {
                 val n = r.read(buf, 0, buf.size)
