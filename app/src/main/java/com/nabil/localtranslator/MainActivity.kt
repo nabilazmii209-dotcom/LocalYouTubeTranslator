@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
     private var whisperModel: WhisperModel? = null
     private val localTranslator by lazy { LocalTranslator(this) }
-    private var modelChoice = ModelManager.BASE
+    private var modelChoice = ModelManager.TINY
     private val queue = ArrayDeque<File>()
     private val queueLock = Any()
     private val workerRunning = AtomicBoolean(false)
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
                 runningTranslation = true
                 b.startLocal.text = "إيقاف الترجمة"
-                b.status.text = "الترجمة المحلية شغّالة. ابدأ تشغيل الفيديو."
+                b.status.text = "الوضع المباشر شغّال • التأخير المستهدف حوالي 3–5 ثوانٍ"
             } else {
                 b.status.text = "لم يتم السماح بالتقاط صوت التشغيل."
             }
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         if (shared.isNotBlank()) b.url.setText(extractUrl(shared))
 
         b.modelGroup.setOnCheckedChangeListener { _, checkedId ->
-            modelChoice = if (checkedId == b.modelSmall.id) ModelManager.SMALL else ModelManager.BASE
+            modelChoice = if (checkedId == b.modelBase.id) ModelManager.BASE else ModelManager.TINY
             whisperModel?.let { Whisper.releaseModel(it) }
             whisperModel = null
             b.modelState.text = "الموديل المختار: ${modelChoice.name}"
@@ -187,7 +187,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun enqueue(file: File) {
         synchronized(queueLock) {
-            while (queue.size >= 4) queue.removeFirst().delete()
+            while (queue.isNotEmpty()) {
+                queue.removeFirst().delete()
+            }
             queue.addLast(file)
         }
         startWorkerIfNeeded()
@@ -230,7 +232,7 @@ class MainActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 b.caption.text = ar
-                b.status.text = "محلي بالكامل • Whisper + ترجمة على الجهاز • بلا API"
+                b.status.text = "Live • محلي بالكامل • بلا API • يلحق أحدث صوت"
             }
         } catch (e: Throwable) {
             withContext(Dispatchers.Main) {
