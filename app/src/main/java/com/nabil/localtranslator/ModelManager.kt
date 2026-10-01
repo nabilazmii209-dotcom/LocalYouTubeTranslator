@@ -10,16 +10,16 @@ import java.net.URL
 object ModelManager {
     data class ModelChoice(val name: String, val file: String, val url: String)
 
-    val BASE = ModelChoice(
-        "Whisper Base متعدد اللغات (~142MB)",
-        "ggml-base.bin",
-        "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
+    val TINY = ModelChoice(
+        "Whisper Tiny متعدد اللغات (~75MB) • مباشر",
+        "ggml-tiny.bin",
+        "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin"
     )
 
-    val SMALL = ModelChoice(
-        "Whisper Small متعدد اللغات (~466MB)",
-        "ggml-small.bin",
-        "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin"
+    val BASE = ModelChoice(
+        "Whisper Base متعدد اللغات (~142MB) • أدق",
+        "ggml-base.bin",
+        "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin"
     )
 
     fun modelFile(context: Context, model: ModelChoice): File =
