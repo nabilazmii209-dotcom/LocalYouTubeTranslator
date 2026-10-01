@@ -1,0 +1,9 @@
+checkout=success
+restore=success
+java=success
+android=failure
+gradle=skipped
+build=skipped
+build_code=
+
+=== BUILD LOG TAIL ===
