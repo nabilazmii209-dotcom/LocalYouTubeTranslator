@@ -2,14 +2,8 @@ name: Build Local YouTube Translator APK
 
 on:
   push:
-    branches:
-      - main
-    paths-ignore:
-      - DIAG.txt
+    branches: [ main ]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -17,17 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Restore Android project
-        shell: bash
-        run: |
-          rm -rf project
-          mkdir -p project
-          base64 -d project.b64 > project.tar.gz
-          tar -xzf project.tar.gz -C project
-          test -f project/settings.gradle.kts
-          test -f project/app/build.gradle.kts
-          printf '%s\n' 'android.useAndroidX=true' 'android.enableJetifier=true' 'org.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8' > project/gradle.properties
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -41,36 +24,11 @@ jobs:
           gradle-version: '8.13'
 
       - name: Build APK
-        id: buildapk
-        shell: bash
-        continue-on-error: true
-        run: |
-          cd project
-          gradle :app:assembleDebug --stacktrace 2>&1 | tee ../full-build.log
-          code=${PIPESTATUS[0]}
-          echo "code=$code" >> "$GITHUB_OUTPUT"
-          exit $code
-
-      - name: Save diagnostics
-        if: always()
-        shell: bash
-        run: |
-          tail -n 300 full-build.log > DIAG.txt 2>/dev/null || echo "No build log" > DIAG.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add DIAG.txt
-          git commit -m "CI diagnostics [skip ci]" || true
-          git pull --rebase origin main || true
-          git push || true
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
-        if: steps.buildapk.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: LocalYouTubeTranslator-debug
-          path: project/app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-
-      - name: Mark failure
-        if: steps.buildapk.outcome != 'success'
-        run: exit 1
