@@ -12,8 +12,8 @@ android {
         applicationId = "com.nabil.localtranslator"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0-youtube-local"
+        versionCode = 3
+        versionName = "1.1-live-sync"
     }
 
     buildTypes {
