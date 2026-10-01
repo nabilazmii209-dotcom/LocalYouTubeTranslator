@@ -4,7 +4,12 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - BUILD_LOG.txt
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -16,6 +21,7 @@ jobs:
       - name: Restore Android project
         shell: bash
         run: |
+          rm -rf project
           mkdir -p project
           base64 -d project.b64 > project.tar.gz
           tar -xzf project.tar.gz -C project
@@ -34,13 +40,37 @@ jobs:
         with:
           gradle-version: '8.13'
 
-      - name: Build debug APK
-        working-directory: project
-        run: gradle :app:assembleDebug --stacktrace
+      - name: Build and capture log
+        id: build
+        shell: bash
+        run: |
+          set +e
+          cd project
+          gradle :app:assembleDebug --stacktrace 2>&1 | tee ../full-build.log
+          code=${PIPESTATUS[0]}
+          cd ..
+          tail -n 350 full-build.log > BUILD_LOG.txt
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Commit diagnostic log on failure
+        if: steps.build.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BUILD_LOG.txt
+          git commit -m "Build diagnostic log [skip ci]" || true
+          git push || true
 
       - name: Upload APK
+        if: steps.build.outputs.exit_code == '0'
         uses: actions/upload-artifact@v4
         with:
           name: LocalYouTubeTranslator-debug
           path: project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Fail workflow if build failed
+        if: steps.build.outputs.exit_code != '0'
+        run: exit 1
