@@ -29,6 +29,11 @@ jobs:
           tar -xzf project.tar.gz -C project
           test -f project/settings.gradle.kts
           test -f project/app/build.gradle.kts
+          cat > project/gradle.properties <<'EOF'
+android.useAndroidX=true
+android.enableJetifier=true
+org.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8
+EOF
 
       - name: Set up Java
         id: java
