@@ -37,16 +37,6 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Check Android SDK
-        id: android
-        shell: bash
-        run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-          test -d "$ANDROID_HOME"
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
-
       - name: Set up Gradle
         id: gradle
         uses: gradle/actions/setup-gradle@v4
@@ -59,6 +49,8 @@ jobs:
         continue-on-error: true
         run: |
           cd project
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           gradle :app:assembleDebug --stacktrace 2>&1 | tee ../full-build.log
           code=${PIPESTATUS[0]}
           echo "code=$code" >> "$GITHUB_OUTPUT"
@@ -72,7 +64,6 @@ jobs:
             echo "checkout=${{ steps.checkout.outcome }}"
             echo "restore=${{ steps.restore.outcome }}"
             echo "java=${{ steps.java.outcome }}"
-            echo "android=${{ steps.android.outcome }}"
             echo "gradle=${{ steps.gradle.outcome }}"
             echo "build=${{ steps.buildapk.outcome }}"
             echo "build_code=${{ steps.buildapk.outputs.code }}"
