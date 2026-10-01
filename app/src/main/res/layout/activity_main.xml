@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#090B10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="مترجم YouTube المحلي"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Whisper على الموبايل • بلا API • بلا حدود"
+            android:textColor="#9BA4B3"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:paddingBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="الصق رابط YouTube"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8F96A3"
+            android:singleLine="true"
+            android:padding="12dp"
+            android:background="#171B24"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <Button
+                android:id="@+id/play"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="تشغيل الفيديو"/>
+
+            <Button
+                android:id="@+id/startLocal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ابدأ الترجمة"/>
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/modelGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="5dp">
+
+            <RadioButton
+                android:id="@+id/modelBase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="سريع (Base ~142MB)"
+                android:textColor="#D7DBE5"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/modelSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="أقوى (Small ~466MB)"
+                android:textColor="#D7DBE5"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/modelState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="الموديل: غير محمّل"
+            android:textColor="#B5BBC7"
+            android:textSize="13sp"
+            android:paddingTop="4dp"/>
+
+        <WebView
+            android:id="@+id/web"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="7dp"/>
+
+        <TextView
+            android:id="@+id/caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:gravity="center"
+            android:text="الترجمة العربية ستظهر هنا"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:background="#CC000000"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="جاهز"
+            android:textColor="#9BA4B3"
+            android:paddingTop="7dp"/>
+    </LinearLayout>
+</FrameLayout>
